@@ -2,11 +2,9 @@ import asyncio
 import json
 import time
 from asyncio import Semaphore
-
 import httpx
 
 
-# Read movie URLs from file
 def read_movie_info(start_line = 0):
     with open("movie_info.txt", "r", encoding="utf-8") as file:
         lines = file.readlines()[start_line:]
@@ -78,14 +76,13 @@ async def fetch_movie_data(client, url, headers, semaphore):
             formatted_data = formatted_data.replace("\r","").replace("\n","").replace(";",",").replace("~",";").replace("&apos,","'").replace("&quot,","\"")
             write_detail_movie_info(formatted_data)
 
-# Asynchronous main function to scrape all movie data
 async def scrape_movies(start_line = 0):
     urls = read_movie_info(start_line)
     headers = {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36"
     }
     
-    semaphore = Semaphore(9)  # Limit concurrent requests
+    semaphore = Semaphore(9)
     async with httpx.AsyncClient() as client:
         tasks = [fetch_movie_data(client, url, headers, semaphore) for url in urls]
         await asyncio.gather(*tasks)
