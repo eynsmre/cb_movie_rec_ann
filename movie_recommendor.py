@@ -1,5 +1,12 @@
+#200101049 Yunus Emre Erkeleş
+#200101108 Yalçın Özdemir
+#200101016 Recep BAYKARA
+#200101045 Muhammed Emin Sayan
+
 import pandas as pd
 import numpy as np
+import ast
+import re
 from sklearn.preprocessing import MultiLabelBinarizer
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.preprocessing import StandardScaler
@@ -7,8 +14,7 @@ from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Dropout, BatchNormalization
 from tensorflow.keras.callbacks import EarlyStopping
 from sklearn.metrics.pairwise import cosine_similarity
-import ast
-import re
+
 
 class MovieRecommender:
     def __init__(self, embedding_dim=128):
@@ -159,7 +165,7 @@ class MovieRecommender:
         return recommendations.sort_values('Similarity_Score', ascending=False)
 
 def main():
-    df = pd.read_csv(r"C:\Users\yunus\Desktop\ann\clean_data\new_data\latest5000_5_clean_imdb_data.csv")
+    df = pd.read_csv("clean_data\latest5000_5_clean_imdb_data.csv")
     
     recommender = MovieRecommender(embedding_dim=128)
     recommender.fit(df)
